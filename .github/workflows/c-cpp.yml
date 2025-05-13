@@ -10,17 +10,25 @@ on:
 jobs:
   syntax-check:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install g++
-        run: sudo apt-get update && sudo apt-get install -y g++
-
-      - name: Syntax check for all .cpp files
         run: |
-          for file in $(find . -name "*.cpp"); do
+          sudo apt-get update
+          sudo apt-get install -y g++
+
+      - name: Syntax check for all C++ files
+        run: |
+          set -e
+          cpp_files=$(find . -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \))
+          if [ -z "$cpp_files" ]; then
+            echo "No C++ files found. Skipping check."
+            exit 0
+          fi
+          for file in $cpp_files; do
             echo "Checking $file"
             g++ -fsyntax-only "$file"
           done
-
