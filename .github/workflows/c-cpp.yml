@@ -1,6 +1,11 @@
 name: C/C++ CI
 
 on:
+  commit:
+    paths:
+      - '**/*.cpp'
+      - '**/*.h'
+      - '**/*.hpp'  
   push:
     paths:
       - '**/*.cpp'
